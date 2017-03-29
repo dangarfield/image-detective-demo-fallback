@@ -1,78 +1,78 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
 
-    <title>Duplicate Detectives | Example App</title>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="../../favicon.ico">
 
-    <!-- Bootstrap core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <title>Duplicate Detectives | Example App</title>
 
-  </head>
+  <!-- Bootstrap core CSS -->
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 
-  <body>
+</head>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+<body>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+          aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">Reset</a>
+        <a class="navbar-brand" href="/">Reset</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <div class="starter-template">
+      <h1>Image Detective (Quick backup app just in case main demo fails)</h1>
+
+      <p>Examples:</p>
+      <ul>
+        <li><a href="/post?url=https://s3.eu-central-1.amazonaws.com/tuichhackathon/image-detective/LIB_SHU_12_F995_RFPreview.jpg&threshold=85">Match - Existing image in DAM</a></li>
+        <li><a href="/post?url=https://s3-eu-west-1.amazonaws.com/adamtui/2016_10/31_14/d36e3561-50f8-4884-9795-a6b000eca6b1/IL241342Preview.jpg&threshold=85">Match - Not quite matching 100%</a></li>
+        <li><a href="/post?url=https://s3-eu-west-1.amazonaws.com/adamtui/2016_3/28_12/63ce3243-bd61-46ce-9e44-a5d700d4ebd3/PHO0515_-7660Preview.jpg&threshold=85">No match - Travel image not in DAM</a></li>
+        <li><a href="/post?url=http://www.officialkaleo.com/sites/g/files/g2000005531/f/201603/012816_Kaleo_Site-OGImage.png&threshold=85">No match - Random image not in DAM</a></li>
+      </ul>
+      <form method="GET" action="/post">
+        <div class="form-group">
+          <label for="url">URL</label>
+          <input type="text" class="form-control" id="url" name="url" placeholder="Url" {{#if target}} value="{{target}}" {{/if}}>
         </div>
-      </div>
-    </nav>
+        <div class="form-group">
+          <label for="threshold">Threshold</label>
+          <input type="text" class="form-control" id="threshold" name="threshold" placeholder="85" value="{{threshold}}">
+        </div>
+        <button type="submit" class="btn btn-default">Detect</button>
+      </form>
 
-    <div class="container">
+      {{#if target}}
+      <p>Target (Threshold - {{threshold}}%)</p>
+      <!--<p>{{target}}</p>-->
+      <img src={{target}} class='img-responsive' width='300px' />
 
-      <div class="starter-template">
-        <h1>Image Detective (Quick backup app just in case main demo fails)</h1>
+      <p>Suspects (Found {{suspects.length}})</p>
+      {{#each suspects}}
+      <!--<li>{{this}}</li>-->
+      <img src={{this}} class='img-responsive pull-left' width='300px' /> {{/each}} {{/if}}
+    </div>
 
-        <p>Examples:</p>
-        <ul>
-            <li><a href="/post?url=https://s3-eu-west-1.amazonaws.com/adamtui/2016_10/31_14/d36e3561-50f8-4884-9795-a6b000eca6b1/IL241342Preview.jpg&threshold=85">not quite matching 100%</a></li>
-            <li><a href="/post?url=https://s3-eu-west-1.amazonaws.com/adamtui/2016_3/28_12/63ce3243-bd61-46ce-9e44-a5d700d4ebd3/PHO0515_-7660Preview.jpg&threshold=85">existing no matches</a></li>
-            <li><a href="/post?url=https://s3-eu-west-1.amazonaws.com/adamtui/2016_1/20_13/67b480ca-9f08-47bf-900e-a59300e20e10/AYT0615_-9076Preview.jpg&threshold=85">match (need better image)</a></li>
-            <li><a href="/post?url=http://www.officialkaleo.com/sites/g/files/g2000005531/f/201603/012816_Kaleo_Site-OGImage.png&threshold=85">not in dam at all</a></li>
-            <li><i>Note: Bad example set, replace these images with the real one or paste urls</i></li>
-        </ul>
-        <form method="GET" action="/post">
-            <div class="form-group">
-                <label for="url">URL</label>
-                <input type="text" class="form-control" id="url" name="url" placeholder="Url"{{#if target}} value="{{target}}"{{/if}}>
-            </div>
-            <div class="form-group">
-                <label for="threshold">Threshold</label>
-                <input type="text" class="form-control" id="threshold" name="threshold" placeholder="85" value="{{threshold}}">
-            </div>
-            <button type="submit" class="btn btn-default">Detect</button>
-            </form>
-
-            {{#if target}}
-                <p>Target (Threshold - {{threshold}}%)</p>
-                <!--<p>{{target}}</p>-->
-                <img src={{target}} class='img-responsive' width='300px'/>
-            
-                <p>Suspects (Found {{suspects.length}})</p>
-                {{#each suspects}}
-                <!--<li>{{this}}</li>-->
-                <img src={{this}} class='img-responsive pull-left' width='300px' />
-                {{/each}}
-            {{/if}}
-      </div>
-
-    </div><!-- /.container -->
+  </div>
+  <!-- /.container -->
 
 
-  </body>
+</body>
+
 </html>
